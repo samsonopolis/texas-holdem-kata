@@ -1,0 +1,21 @@
+{
+  "name": "katas-ts",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "NODE_ENV=test jasmine-ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/jasmine": "^2.8.6",
+    "jasmine-ts": "^0.2.1",
+    "typescript": "^2.8.3"
+  },
+  "dependencies": {
+    "jasmine-spec-reporter": "^4.2.1"
+  }
+}
+
