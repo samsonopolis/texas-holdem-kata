@@ -86,7 +86,7 @@ describe('Texas Hold Em', () => {
       });
     });
 
-    describe('three of a kind', () => {
+    fdescribe('three of a kind', () => {
       beforeEach(() => {
         game = new Game("4C 7D QH 3S 7H 10H 7S")
       });
