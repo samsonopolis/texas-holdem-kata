@@ -63,7 +63,7 @@ class HandEvaluator {
   constructor(private hand) { }
 
   evaluate() {
-    return this.twoOfAKind() || this.highCard();
+    return this.twoPair() || this.twoOfAKind() || this.highCard();
   }
 
   private highCard() {
@@ -76,7 +76,29 @@ class HandEvaluator {
   }
 
   private twoOfAKind() {
-    const rankCounts = this.hand.hand.reduce((acc, cur) => {
+    const rankCounts = this.getRankCounts();
+    const pairs = Object.keys(rankCounts)
+      .map(rank => ({ rank, count: rankCounts[rank] }))
+      .filter(c => c.count === 2);
+    if (pairs.length === 1)
+      return `Two of a Kind (${pairs[0].rank} high)`;
+
+    return false;
+  }
+
+  private twoPair() {
+    const rankCounts = this.getRankCounts();
+    const pairs = Object.keys(rankCounts)
+      .map(rank => ({ rank, count: rankCounts[rank] }))
+      .filter(c => c.count === 2)
+      .sort((a, b) => RANKS.indexOf(b.rank) - RANKS.indexOf(a.rank));
+    if (pairs.length === 2) return `Two Pair (${pairs[0].rank} high)`;
+
+    return false;
+  }
+
+  private getRankCounts() {
+    return this.hand.hand.reduce((acc, cur) => {
       const rank = cur.rank;
       if (acc[rank])
         return ({
@@ -88,12 +110,5 @@ class HandEvaluator {
         [rank]: 1,
       });
     }, {});
-    const pairs = Object.keys(rankCounts)
-      .map(rank => ({ rank, count: rankCounts[rank] }))
-      .filter(c => c.count === 2);
-    if (pairs.length === 1)
-      return `Two of a Kind (${pairs[0].rank} high)`;
-
-    return false;
   }
 }
