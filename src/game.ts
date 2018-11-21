@@ -63,7 +63,7 @@ class HandEvaluator {
   constructor(private hand) { }
 
   evaluate() {
-    return this.threeOfAKind() || this.twoPair() || this.twoOfAKind() || this.highCard();
+    return this.straight() || this.threeOfAKind() || this.twoPair() || this.twoOfAKind() || this.highCard();
   }
 
   private highCard() {
@@ -96,6 +96,25 @@ class HandEvaluator {
     const threeCards = this.getRanksWithCount(3);
 
     if (threeCards.length > 0) return `Three of a Kind (${threeCards[0].rank} high)`;
+
+    return false;
+  }
+
+  private straight() {
+    let orderedHand = Array.from(new Set(this.hand.hand
+      .map(card => RANKS.indexOf(card.rank))))
+      .sort((a, b) => +a - +b);
+    if (orderedHand.includes(RANKS.indexOf('A'))) {
+      orderedHand = [-1, ...orderedHand]
+    }
+    const straightRankIndex = orderedHand.reduce((highestStraightRank, rank) => {
+      const a = Array.from({ length: 5 }, (v, k) => k + +rank);
+      return a.every(rank => orderedHand.includes(rank))
+        ? +rank + 4 : highestStraightRank;
+    }, undefined);
+
+    if (straightRankIndex)
+      return `Straight (${RANKS[+straightRankIndex]} high)`
 
     return false;
   }
